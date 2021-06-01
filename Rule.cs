@@ -1,10 +1,10 @@
 ﻿namespace Gamerules
 {
     /// <summary>
-    /// An abstract implementation of <see cref="IRule{T}"/>.
+    /// An abstract, generic implementation of <see cref="IRule"/>.
     /// </summary>
-    /// <typeparam name="T">The type parameter for <see cref="IRule{T}"/>.</typeparam>
-    public abstract class Rule<T> : IRule<T>
+    /// <typeparam name="T">The type parameter for <see cref="IRule"/>.</typeparam>
+    public abstract class Rule<T> : IRule where T : notnull
     {
         /// <summary>
         /// Instantiates a new rule instance.
@@ -27,7 +27,11 @@
         public T DefaultValue { get; }
 
         /// <inheritdoc/>
-        public T Value { get; set; }
+        public virtual T Value { get; set; }
+
+        object IRule.Value { get => Value; set => Value = (T)value; }
+
+        object IRule.DefaultValue => DefaultValue;
 
         /// <inheritdoc/>
         public abstract Result Deserialize(string jsonValue);

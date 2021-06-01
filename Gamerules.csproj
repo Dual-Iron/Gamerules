@@ -27,6 +27,10 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DocumentationFile>C:\Users\Dual\source\repos\Gamerules\Gamerules.xml</DocumentationFile>
   </PropertyGroup>
+  
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DocumentationFile>C:\Users\Dual\source\repos\Gamerules\Gamerules.xml</DocumentationFile>
+  </PropertyGroup>
 
   <ItemGroup>
     <Reference Include="$(BepPath)\core\BepInEx.dll" />

@@ -47,48 +47,74 @@
         <member name="M:Gamerules.IntRule.Serialize">
             <inheritdoc/>
         </member>
-        <member name="T:Gamerules.IRule`1">
+        <member name="T:Gamerules.IRule">
             <summary>
             Defines a type of gamerule.
             </summary>
             <typeparam name="T">The type of the gamerule's value.</typeparam>
         </member>
-        <member name="P:Gamerules.IRule`1.Name">
+        <member name="P:Gamerules.IRule.Name">
             <summary>
             The gamerule's name. This should be immutable and can only contain a-z, A-Z, 0-9, apostrophe, comma, hyphen, underscore, and space.
             </summary>
         </member>
-        <member name="P:Gamerules.IRule`1.Description">
+        <member name="P:Gamerules.IRule.Description">
             <summary>
             The gamerule's description.
             </summary>
         </member>
-        <member name="P:Gamerules.IRule`1.Value">
+        <member name="P:Gamerules.IRule.Value">
             <summary>
             The gamerule's current value.
             </summary>
         </member>
-        <member name="P:Gamerules.IRule`1.DefaultValue">
+        <member name="P:Gamerules.IRule.DefaultValue">
             <summary>
             The gamerule's fallback value.
             </summary>
         </member>
-        <member name="M:Gamerules.IRule`1.Deserialize(System.String)">
+        <member name="M:Gamerules.IRule.Deserialize(System.String)">
             <summary>
             Gets the gamerule's value from a JSON value.
             </summary>
             <param name="jsonValue">The JSON value.</param>
         </member>
-        <member name="M:Gamerules.IRule`1.Serialize">
+        <member name="M:Gamerules.IRule.Serialize">
             <summary>
             Gets a JSON value from the gamerule's value.
             </summary>
         </member>
+        <member name="T:Gamerules.Result">
+            <summary>
+            Defines a potential error.
+            </summary>
+        </member>
+        <member name="P:Gamerules.Result.Err">
+            <summary>
+            The error message, or null if there was no error.
+            </summary>
+        </member>
+        <member name="P:Gamerules.Result.IsOk">
+            <summary>
+            True if there was an error.
+            </summary>
+        </member>
+        <member name="M:Gamerules.Result.FromOk">
+            <summary>
+            Gets a result that indicates no errors occurred.
+            </summary>
+        </member>
+        <member name="M:Gamerules.Result.FromErr(System.String)">
+            <summary>
+            Gets a result that indicates an error occurred.
+            </summary>
+            <param name="err">The error message.</param>
+        </member>
         <member name="T:Gamerules.Rule`1">
             <summary>
-            An abstract implementation of <see cref="T:Gamerules.IRule`1"/>.
+            An abstract, generic implementation of <see cref="T:Gamerules.IRule"/>.
             </summary>
-            <typeparam name="T">The type parameter for <see cref="T:Gamerules.IRule`1"/>.</typeparam>
+            <typeparam name="T">The type parameter for <see cref="T:Gamerules.IRule"/>.</typeparam>
         </member>
         <member name="M:Gamerules.Rule`1.#ctor(System.String,System.String,`0)">
             <summary>
@@ -113,7 +139,12 @@
         <member name="M:Gamerules.Rule`1.Serialize">
             <inheritdoc/>
         </member>
-        <member name="M:Gamerules.RuleAPI.Register``1(Gamerules.IRule{``0})">
+        <member name="T:Gamerules.RuleAPI">
+            <summary>
+            Start here. Provides methods for registering, enumerating, and getting gamerules.
+            </summary>
+        </member>
+        <member name="M:Gamerules.RuleAPI.Register``1(Gamerules.IRule)">
             <summary>
             Register a gamerule.
             </summary>
@@ -123,6 +154,12 @@
             <summary>
             An enumerable of every registered gamerule.
             </summary>
+        </member>
+        <member name="M:Gamerules.RuleAPI.TryGetRule(System.String,Gamerules.IRule@)">
+            <summary>
+            Tries to get a rule with the given name.
+            </summary>
+            <returns>True if a matching rule exists; false otherwise.</returns>
         </member>
     </members>
 </doc>

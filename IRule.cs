@@ -4,7 +4,7 @@
     /// Defines a type of gamerule.
     /// </summary>
     /// <typeparam name="T">The type of the gamerule's value.</typeparam>
-    public interface IRule<T>
+    public interface IRule
     {
         /// <summary>
         /// The gamerule's name. This should be immutable and can only contain a-z, A-Z, 0-9, apostrophe, comma, hyphen, underscore, and space.
@@ -19,12 +19,12 @@
         /// <summary>
         /// The gamerule's current value.
         /// </summary>
-        T Value { get; set; }
+        object Value { get; set; }
 
         /// <summary>
         /// The gamerule's fallback value.
         /// </summary>
-        T DefaultValue { get; }
+        object DefaultValue { get; }
 
         /// <summary>
         /// Gets the gamerule's value from a JSON value.
