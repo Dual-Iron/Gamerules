@@ -1,0 +1,128 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Gamerules</name>
+    </assembly>
+    <members>
+        <member name="T:Gamerules.BoolRule">
+            <summary>
+            Defines a rule with a boolean value.
+            </summary>
+        </member>
+        <member name="M:Gamerules.BoolRule.#ctor(System.String,System.String,System.Boolean)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Gamerules.BoolRule.Deserialize(System.String)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Gamerules.BoolRule.Serialize">
+            <inheritdoc/>
+        </member>
+        <member name="T:Gamerules.IntRule">
+            <summary>
+            Defines a rule with an integer value.
+            </summary>
+        </member>
+        <member name="M:Gamerules.IntRule.#ctor(System.String,System.String,System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Instantiates a new rule instance with a minimum and maximum value.
+            </summary>
+        </member>
+        <member name="M:Gamerules.IntRule.#ctor(System.String,System.String,System.Int32)">
+            <inheritdoc/>
+        </member>
+        <member name="P:Gamerules.IntRule.Min">
+            <summary>
+            The minimum value.
+            </summary>
+        </member>
+        <member name="P:Gamerules.IntRule.Max">
+            <summary>
+            The maximum value.
+            </summary>
+        </member>
+        <member name="M:Gamerules.IntRule.Deserialize(System.String)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Gamerules.IntRule.Serialize">
+            <inheritdoc/>
+        </member>
+        <member name="T:Gamerules.IRule`1">
+            <summary>
+            Defines a type of gamerule.
+            </summary>
+            <typeparam name="T">The type of the gamerule's value.</typeparam>
+        </member>
+        <member name="P:Gamerules.IRule`1.Name">
+            <summary>
+            The gamerule's name. This should be immutable and can only contain a-z, A-Z, 0-9, apostrophe, comma, hyphen, underscore, and space.
+            </summary>
+        </member>
+        <member name="P:Gamerules.IRule`1.Description">
+            <summary>
+            The gamerule's description.
+            </summary>
+        </member>
+        <member name="P:Gamerules.IRule`1.Value">
+            <summary>
+            The gamerule's current value.
+            </summary>
+        </member>
+        <member name="P:Gamerules.IRule`1.DefaultValue">
+            <summary>
+            The gamerule's fallback value.
+            </summary>
+        </member>
+        <member name="M:Gamerules.IRule`1.Deserialize(System.String)">
+            <summary>
+            Gets the gamerule's value from a JSON value.
+            </summary>
+            <param name="jsonValue">The JSON value.</param>
+        </member>
+        <member name="M:Gamerules.IRule`1.Serialize">
+            <summary>
+            Gets a JSON value from the gamerule's value.
+            </summary>
+        </member>
+        <member name="T:Gamerules.Rule`1">
+            <summary>
+            An abstract implementation of <see cref="T:Gamerules.IRule`1"/>.
+            </summary>
+            <typeparam name="T">The type parameter for <see cref="T:Gamerules.IRule`1"/>.</typeparam>
+        </member>
+        <member name="M:Gamerules.Rule`1.#ctor(System.String,System.String,`0)">
+            <summary>
+            Instantiates a new rule instance.
+            </summary>
+        </member>
+        <member name="P:Gamerules.Rule`1.Name">
+            <inheritdoc/>
+        </member>
+        <member name="P:Gamerules.Rule`1.Description">
+            <inheritdoc/>
+        </member>
+        <member name="P:Gamerules.Rule`1.DefaultValue">
+            <inheritdoc/>
+        </member>
+        <member name="P:Gamerules.Rule`1.Value">
+            <inheritdoc/>
+        </member>
+        <member name="M:Gamerules.Rule`1.Deserialize(System.String)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Gamerules.Rule`1.Serialize">
+            <inheritdoc/>
+        </member>
+        <member name="M:Gamerules.RuleAPI.Register``1(Gamerules.IRule{``0})">
+            <summary>
+            Register a gamerule.
+            </summary>
+            <param name="rule">The gamerule instance.</param>
+        </member>
+        <member name="P:Gamerules.RuleAPI.Rules">
+            <summary>
+            An enumerable of every registered gamerule.
+            </summary>
+        </member>
+    </members>
+</doc>
