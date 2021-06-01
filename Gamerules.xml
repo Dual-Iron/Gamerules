@@ -23,7 +23,7 @@
             Defines a rule with an integer value.
             </summary>
         </member>
-        <member name="M:Gamerules.IntRule.#ctor(System.String,System.String,System.Int32,System.String,System.Int32,System.Int32)">
+        <member name="M:Gamerules.IntRule.#ctor(System.String,System.String,System.Int32,System.Int32,System.Int32,System.String)">
             <summary>
             Instantiates a new rule instance with a minimum and maximum value.
             </summary>
