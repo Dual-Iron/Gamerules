@@ -144,7 +144,7 @@
             Start here. Provides methods for registering, enumerating, and getting gamerules.
             </summary>
         </member>
-        <member name="M:Gamerules.RuleAPI.Register``1(Gamerules.IRule)">
+        <member name="M:Gamerules.RuleAPI.Register(Gamerules.IRule)">
             <summary>
             Register a gamerule.
             </summary>

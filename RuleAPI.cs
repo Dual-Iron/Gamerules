@@ -11,7 +11,7 @@ namespace Gamerules
         internal static readonly Dictionary<string, IRule> rules = new();
 
         /// <summary>
-        /// Register a gamerule.
+        /// Registers a new gamerule or replaces an existing one with the same name.
         /// </summary>
         /// <param name="rule">The gamerule instance.</param>
         public static void Register(IRule rule)
