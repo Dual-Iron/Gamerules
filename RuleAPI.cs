@@ -20,10 +20,9 @@ namespace Gamerules
             for (int i = 0; i < name.Length; i++)
             {
                 bool valid = 
-                    name[i] >= 'A' && name[i] <= 'Z' || 
                     name[i] >= 'a' && name[i] <= 'z' || 
                     name[i] >= '0' && name[i] <= '9' || 
-                    name[i] == ' ' || name[i] == '-' || name[i] == '_' || name[i] == ',' || name[i] == '\'';
+                    name[i] == '_';
 
                 if (!valid)
                     throw new ArgumentException($"The name '{name}' is invalid. Rule names can only contain a-z, A-Z, 0-9, apostrophe, comma, hyphen, underscore, and space.");

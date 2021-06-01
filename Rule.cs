@@ -9,10 +9,11 @@
         /// <summary>
         /// Instantiates a new rule instance.
         /// </summary>
-        protected Rule(string name, string description, T defaultValue)
+        protected Rule(string name, string displayName, T defaultValue, string description)
         {
             Name = name;
             Description = description;
+            DisplayName = displayName;
             DefaultValue = defaultValue;
             Value = defaultValue;
         }
@@ -22,6 +23,9 @@
 
         /// <inheritdoc/>
         public string Description { get; }
+
+        /// <inheritdoc/>
+        public string DisplayName { get; }
 
         /// <inheritdoc/>
         public T DefaultValue { get; }

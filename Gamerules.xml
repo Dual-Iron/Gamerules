@@ -9,7 +9,7 @@
             Defines a rule with a boolean value.
             </summary>
         </member>
-        <member name="M:Gamerules.BoolRule.#ctor(System.String,System.String,System.Boolean)">
+        <member name="M:Gamerules.BoolRule.#ctor(System.String,System.String,System.Boolean,System.String)">
             <inheritdoc/>
         </member>
         <member name="M:Gamerules.BoolRule.Deserialize(System.String)">
@@ -23,12 +23,12 @@
             Defines a rule with an integer value.
             </summary>
         </member>
-        <member name="M:Gamerules.IntRule.#ctor(System.String,System.String,System.Int32,System.Int32,System.Int32)">
+        <member name="M:Gamerules.IntRule.#ctor(System.String,System.String,System.Int32,System.String,System.Int32,System.Int32)">
             <summary>
             Instantiates a new rule instance with a minimum and maximum value.
             </summary>
         </member>
-        <member name="M:Gamerules.IntRule.#ctor(System.String,System.String,System.Int32)">
+        <member name="M:Gamerules.IntRule.#ctor(System.String,System.String,System.Int32,System.String)">
             <inheritdoc/>
         </member>
         <member name="P:Gamerules.IntRule.Min">
@@ -55,7 +55,12 @@
         </member>
         <member name="P:Gamerules.IRule.Name">
             <summary>
-            The gamerule's name. This should be immutable and can only contain a-z, A-Z, 0-9, apostrophe, comma, hyphen, underscore, and space.
+            The gamerule's internal name. This should be immutable and can only contain a-z, 0-9, and underscore.
+            </summary>
+        </member>
+        <member name="P:Gamerules.IRule.DisplayName">
+            <summary>
+            The gamerule's display name.
             </summary>
         </member>
         <member name="P:Gamerules.IRule.Description">
@@ -116,7 +121,7 @@
             </summary>
             <typeparam name="T">The type parameter for <see cref="T:Gamerules.IRule"/>.</typeparam>
         </member>
-        <member name="M:Gamerules.Rule`1.#ctor(System.String,System.String,`0)">
+        <member name="M:Gamerules.Rule`1.#ctor(System.String,System.String,`0,System.String)">
             <summary>
             Instantiates a new rule instance.
             </summary>
@@ -125,6 +130,9 @@
             <inheritdoc/>
         </member>
         <member name="P:Gamerules.Rule`1.Description">
+            <inheritdoc/>
+        </member>
+        <member name="P:Gamerules.Rule`1.DisplayName">
             <inheritdoc/>
         </member>
         <member name="P:Gamerules.Rule`1.DefaultValue">
