@@ -7,7 +7,7 @@
     public interface IRule
     {
         /// <summary>
-        /// The gamerule's internal name. This should be immutable and can only contain a-z, 0-9, and underscore.
+        /// The gamerule's internal name. This should be immutable and can only contain a-z, 0-9, forward slash, and underscore.
         /// </summary>
         string Name { get; }
 

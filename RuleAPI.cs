@@ -25,7 +25,7 @@ namespace Gamerules
                     name[i] == '_';
 
                 if (!valid)
-                    throw new ArgumentException($"The name '{name}' is invalid. Rule names can only contain a-z, A-Z, 0-9, apostrophe, comma, hyphen, underscore, and space.");
+                    throw new ArgumentException($"The name '{name}' is invalid. Rule names can only contain a-z, 0-9, forward slash, and underscore.");
             }
             rules[name] = rule;
         }
