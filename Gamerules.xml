@@ -12,6 +12,9 @@
         <member name="M:Gamerules.BoolRule.#ctor(System.String,System.String,System.Boolean,System.String)">
             <inheritdoc/>
         </member>
+        <member name="M:Gamerules.BoolRule.#ctor(System.String,System.Boolean,System.String)">
+            <inheritdoc/>
+        </member>
         <member name="M:Gamerules.BoolRule.Deserialize(System.String)">
             <inheritdoc/>
         </member>
@@ -24,6 +27,11 @@
             </summary>
         </member>
         <member name="M:Gamerules.IntRule.#ctor(System.String,System.String,System.Int32,System.Int32,System.Int32,System.String)">
+            <summary>
+            Instantiates a new rule instance with a minimum and maximum value.
+            </summary>
+        </member>
+        <member name="M:Gamerules.IntRule.#ctor(System.String,System.Int32,System.Int32,System.Int32,System.String)">
             <summary>
             Instantiates a new rule instance with a minimum and maximum value.
             </summary>
@@ -124,6 +132,11 @@
         <member name="M:Gamerules.Rule`1.#ctor(System.String,System.String,`0,System.String)">
             <summary>
             Instantiates a new rule instance.
+            </summary>
+        </member>
+        <member name="M:Gamerules.Rule`1.#ctor(System.String,`0,System.String)">
+            <summary>
+            Instantiates a new rule instance with an inferred display name.
             </summary>
         </member>
         <member name="P:Gamerules.Rule`1.Name">

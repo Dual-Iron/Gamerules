@@ -1,4 +1,7 @@
-﻿namespace Gamerules
+﻿using System.Text;
+using System.Text.RegularExpressions;
+
+namespace Gamerules
 {
     /// <summary>
     /// An abstract, generic implementation of <see cref="IRule"/>.
@@ -16,6 +19,33 @@
             DisplayName = displayName;
             DefaultValue = defaultValue;
             Value = defaultValue;
+        }
+
+        /// <summary>
+        /// Instantiates a new rule instance with an inferred display name.
+        /// </summary>
+        protected Rule(string name, T defaultValue, string description)
+        {
+            Name = name;
+            Description = description;
+            DefaultValue = defaultValue;
+            Value = defaultValue;
+
+            StringBuilder sb = new();
+
+            for (int i = 0; i < name.Length - 1; i++)
+            {
+                if (name[i] == '/')
+                    sb.Append(" -> ");
+                else if (name[i] == '_')
+                    sb.Append(" ");
+                else if (i == 0 || name[i - 1] == '_' || name[i - 1] == '/')
+                    sb.Append(" " + char.ToUpper(name[i]));
+                else
+                    sb.Append(name[i]);
+            }
+
+            DisplayName = sb.ToString();
         }
 
         /// <inheritdoc/>

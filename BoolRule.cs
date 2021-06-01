@@ -13,6 +13,11 @@ namespace Gamerules
         }
 
         /// <inheritdoc/>
+        public BoolRule(string name, bool defaultValue, string description) : base(name, defaultValue, description)
+        {
+        }
+
+        /// <inheritdoc/>
         public override Result Deserialize(string fromString)
         {
             if (fromString == "true")
