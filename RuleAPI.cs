@@ -14,7 +14,7 @@ namespace Gamerules
         /// Register a gamerule.
         /// </summary>
         /// <param name="rule">The gamerule instance.</param>
-        public static void Register<T>(IRule rule)
+        public static void Register(IRule rule)
         {
             string name = rule.Name;
             for (int i = 0; i < name.Length; i++)
