@@ -1,56 +1,34 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace Gamerules
+﻿namespace Gamerules
 {
+    /// <summary>
+    /// Defines a potential error.
+    /// </summary>
     public struct Result
     {
+        /// <summary>
+        /// The error message, or null if there was no error.
+        /// </summary>
         public string? Err { get; }
 
-        public bool Success => Err == null;
+        /// <summary>
+        /// True if there was an error.
+        /// </summary>
+        public bool IsOk => Err == null;
 
         private Result(string err)
         {
             Err = err;
         }
 
+        /// <summary>
+        /// Gets a result that indicates no errors occurred.
+        /// </summary>
         public static Result FromOk() => default;
+
+        /// <summary>
+        /// Gets a result that indicates an error occurred.
+        /// </summary>
+        /// <param name="err">The error message.</param>
         public static Result FromErr(string err) => new(err);
-    }
-
-    public struct Result<T>
-    {
-        private readonly T? ok;
-        public T Ok => ok ?? throw new InvalidOperationException("Tried to get Ok despite result being a failure.");
-
-        private readonly string? err;
-        public string Err
-        {
-            get
-            {
-                if (ok == null)
-                    return err ?? "An error occurred.";
-                throw new InvalidOperationException("Tried to get Err despite result being a success.");
-            }
-        }
-
-        public bool Success => err == null;
-
-        private Result(T ok)
-        {
-            this.ok = ok;
-            err = null;
-        }
-
-        private Result(string err)
-        {
-            ok = default;
-            this.err = err;
-        }
-
-        public static Result<T> FromOk(T ok) => new(ok);
-        public static Result<T> FromErr(string err) => new(err);
     }
 }
