@@ -11,23 +11,30 @@ namespace Gamerules
         internal static readonly Dictionary<string, IRule> rules = new();
 
         /// <summary>
-        /// Registers a new gamerule or replaces an existing one with the same name.
+        /// Registers a gamerule. Once a rule is registered, it can't be registered again.
         /// </summary>
-        /// <param name="rule">The gamerule instance.</param>
-        public static void Register(IRule rule)
+        /// <param name="rule">The gamerule instance, or null to remove the gamerule.</param>
+        /// <param name="id">Can only contain a-z, 0-9, forward slash, and underscore.</param>
+        public static void Register(string id, IRule rule)
         {
-            string name = rule.Name;
-            for (int i = 0; i < name.Length; i++)
+            if (id == null || rule == null)
+                throw new ArgumentNullException();
+
+            if (rules.ContainsKey(id))
+                throw new ArgumentException($"The ID '{id}' is already taken.");
+
+            for (int i = 0; i < id.Length; i++)
             {
                 bool valid = 
-                    name[i] >= 'a' && name[i] <= 'z' || 
-                    name[i] >= '0' && name[i] <= '9' || 
-                    name[i] == '_';
+                    id[i] >= 'a' && id[i] <= 'z' || 
+                    id[i] >= '0' && id[i] <= '9' || 
+                    id[i] == '_';
 
                 if (!valid)
-                    throw new ArgumentException($"The name '{name}' is invalid. Rule names can only contain a-z, 0-9, forward slash, and underscore.");
+                    throw new ArgumentException($"The name '{id}' is invalid. Rule names can only contain a-z, 0-9, forward slash, and underscore.");
             }
-            rules[name] = rule;
+
+            rules[id] = rule;
         }
 
         /// <summary>
@@ -39,19 +46,9 @@ namespace Gamerules
         /// Tries to get a rule with the given name.
         /// </summary>
         /// <returns>True if a matching rule exists; false otherwise.</returns>
-        public static bool TryGetRule(string name, [MaybeNullWhen(false)] out IRule rule)
+        public static bool TryGetRule(string id, [System.Diagnostics.CodeAnalysis.MaybeNullWhen(false)] out IRule rule)
         {
-            return rules.TryGetValue(name, out rule);
-        }
-
-        private class MaybeNullWhenAttribute : Attribute
-        {
-            public readonly bool when;
-
-            public MaybeNullWhenAttribute(bool when)
-            {
-                this.when = when;
-            }
+            return rules.TryGetValue(id, out rule);
         }
     }
 }

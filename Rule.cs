@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System;
+using System.Text;
 using System.Text.RegularExpressions;
 
 namespace Gamerules
@@ -12,50 +13,60 @@ namespace Gamerules
         /// <summary>
         /// Instantiates a new rule instance.
         /// </summary>
-        protected Rule(string name, string displayName, T defaultValue, string description)
+        protected Rule(T defaultValue)
         {
-            Name = name;
-            Description = description;
-            DisplayName = displayName;
-            DefaultValue = defaultValue;
-            Value = defaultValue;
+            DefaultValue = Value = defaultValue;
         }
 
+        private string? defaultDisplayName;
+        private string? displayName;
+        private string? id;
+
         /// <summary>
-        /// Instantiates a new rule instance with an inferred display name.
+        /// The rule's ID. Setting this property to a non-null value registers the rule. Once the rule is registered, it can't be registered again.
         /// </summary>
-        protected Rule(string name, T defaultValue, string description)
+        public string? ID
         {
-            Name = name;
-            Description = description;
-            DefaultValue = defaultValue;
-            Value = defaultValue;
+            get => id; 
+            set
+            {
+                if (value == null)
+                    return;
+                if (id != null || RuleAPI.TryGetRule(value, out _))
+                    throw new InvalidOperationException("Can't change a gamerule's ID once already registered.");
+                RuleAPI.Register(id = value, this);
+            }
+        }
+
+        /// <inheritdoc/>
+        public string Description { get; set; } = "";
+
+        /// <summary>
+        /// The gamerule's display name. This is automatically determined by <see cref="ID"/>, but you can override it by setting this property.
+        /// </summary>
+        public string DisplayName { get => displayName ?? (defaultDisplayName ??= GetDefaultDisplayName()); set => displayName = value; }
+
+        private string GetDefaultDisplayName()
+        {
+            if (id == null)
+                return "";
 
             StringBuilder sb = new();
 
-            for (int i = 0; i < name.Length - 1; i++)
+            for (int i = 0; i < id.Length - 1; i++)
             {
-                if (name[i] == '/')
+                if (id[i] == '/')
                     sb.Append(" -> ");
-                else if (name[i] == '_')
+                else if (id[i] == '_')
                     sb.Append(" ");
-                else if (i == 0 || name[i - 1] == '_' || name[i - 1] == '/')
-                    sb.Append(" " + char.ToUpper(name[i]));
+                else if (i == 0 || id[i - 1] == '_' || id[i - 1] == '/')
+                    sb.Append(" " + char.ToUpper(id[i]));
                 else
-                    sb.Append(name[i]);
+                    sb.Append(id[i]);
             }
 
-            DisplayName = sb.ToString();
+            return sb.ToString();
         }
-
-        /// <inheritdoc/>
-        public string Name { get; }
-
-        /// <inheritdoc/>
-        public string Description { get; }
-
-        /// <inheritdoc/>
-        public string DisplayName { get; }
 
         /// <inheritdoc/>
         public T DefaultValue { get; }

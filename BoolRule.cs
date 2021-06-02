@@ -8,12 +8,7 @@ namespace Gamerules
     public class BoolRule : Rule<bool>
     {
         /// <inheritdoc/>
-        public BoolRule(string name, string displayName, bool defaultValue, string description) : base(name, displayName, defaultValue, description)
-        {
-        }
-
-        /// <inheritdoc/>
-        public BoolRule(string name, bool defaultValue, string description) : base(name, defaultValue, description)
+        public BoolRule(bool defaultValue) : base(defaultValue)
         {
         }
 

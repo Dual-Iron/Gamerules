@@ -10,23 +10,16 @@ namespace Gamerules
         /// <summary>
         /// Instantiates a new rule instance with a minimum and maximum value.
         /// </summary>
-        public IntRule(string name, string displayName, int defaultValue, int min, int max, string description) : base(name, displayName, defaultValue, description)
+        public IntRule(int defaultValue, int min, int max) : base(defaultValue)
         {
             Min = min;
             Max = max;
         }
 
         /// <summary>
-        /// Instantiates a new rule instance with a minimum and maximum value.
+        /// Instantiates a new rule instance.
         /// </summary>
-        public IntRule(string name, int defaultValue, int min, int max, string description) : base(name, defaultValue, description)
-        {
-            Min = min;
-            Max = max;
-        }
-
-        /// <inheritdoc/>
-        public IntRule(string name, string displayName, int defaultValue, string description) : this(name, displayName, defaultValue, int.MinValue, int.MaxValue, description)
+        public IntRule(int defaultValue) : this(defaultValue, int.MinValue, int.MaxValue)
         {
         }
 

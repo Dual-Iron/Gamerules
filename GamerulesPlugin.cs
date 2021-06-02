@@ -2,6 +2,7 @@
 using BepInEx.Logging;
 using RWCustom;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
@@ -53,9 +54,35 @@ namespace Gamerules
                 if (!File.Exists(path))
                 {
                     File.WriteAllText(path, "{}");
-                    return ParseJson("{}");
+                    return Result.FromOk();
                 }
-                return ParseJson(File.ReadAllText(path));
+
+                var jsonResult = ParseJson(File.ReadAllText(path));
+                if (jsonResult.Err is string jsonErr)
+                    return Result.FromErr(jsonErr);
+
+                var errors = new StringBuilder();
+                foreach (var kvp in jsonResult.Ok!)
+                {
+                    if (RuleAPI.TryGetRule(kvp.Key, out var rule))
+                    {
+                        try
+                        {
+                            var userResult = rule.Deserialize(kvp.Value);
+                            if (userResult.Err is string ruleErr)
+                                errors.AppendLine($"Rule '{kvp.Key}' couldn't be parsed. {ruleErr}");
+                        }
+                        catch (Exception e)
+                        {
+                            errors.AppendLine($"Rule '{kvp.Key}' threw an exception while deserializing. {e}");
+                        }
+                    }
+                }
+
+                if (errors.Length > 0)
+                    return Result.FromErr(errors.ToString());
+
+                return Result.FromOk();
             }
             catch (Exception e)
             {
@@ -63,47 +90,52 @@ namespace Gamerules
             }
         }
 
-        private static Result ParseJson(string json)
+        private static Result<Dictionary<string, string>> ParseJson(string json)
         {
-            Result invalid = Result.FromErr("Invalid JSON. Use https://jsonlint.com/ to check your JSON.");
-            StringBuilder errors = new();
+            var invalid = Result<Dictionary<string, string>>.FromErr("Invalid JSON. Use jsonlint.com to validate your JSON.");
 
             int index = 0;
 
             ConsumeWhitespace();
 
-            if (!Consume('{'))
+            if (json[index++] != '{')
                 return invalid;
 
             ConsumeWhitespace();
 
-            while (Consume('"'))
+            var ret = new Dictionary<string, string>();
+
+            while (json[index] == '"')
             {
+                index++;
+
                 int nameStart = index;
 
-                while (!Consume('"'))
+                while (json[index] != '"')
                     if (index < json.Length)
                         index++;
                     else return invalid;
 
                 string name = json.Substring(nameStart, index - nameStart);
 
+                index++;
+
                 ConsumeWhitespace();
 
-                if (!Consume(':'))
+                if (json[index++] != ':')
                     return invalid;
-
-                ConsumeWhitespace();
 
                 int valueStart = index;
                 int stack = 0;
 
                 while (true)
                 {
+                    index++;
+
                     if (index >= json.Length)
                         return invalid;
 
-                    char cur = Advance();
+                    char cur = json[index];
 
                     if (cur == ',' && stack != 0 || cur == '}' && stack == 0)
                         break;
@@ -115,39 +147,24 @@ namespace Gamerules
 
                 string value = json.Substring(valueStart, index - valueStart);
 
-                if (RuleAPI.rules.TryGetValue(name, out var rule))
-                {
-                    try
-                    {
-                        if (rule.Deserialize(value.Trim()).Err is string s)
-                            errors.AppendLine($"Gamerule '{name}' couldn't be parsed. {s}");
-                    }
-                    catch (Exception e)
-                    {
-                        errors.AppendLine($"Gamerule '{name}' threw an exception while deserializing. {e}");
-                    }
-                }
-                else errors.AppendLine($"Gamerule '{name}' does not exist.");
+                ret[name] = value.Trim();
 
                 ConsumeWhitespace();
             }
 
+            if (json[index++] != '}')
+                return invalid;
+
             ConsumeWhitespace();
 
-            if (!Consume('}'))
-                errors.AppendLine(invalid.Err);
+            if (index < json.Length)
+                return invalid;
 
-            if (errors.Length > 0)
-                return Result.FromErr(errors.ToString());
-
-            return Result.FromOk();
-
-            char Advance() => index < json.Length ? json[index++] : '\0';
-            bool Consume(char c) => Advance() == c;
+            return Result.FromOk(ret);
 
             void ConsumeWhitespace()
             {
-                while (char.IsWhiteSpace(Advance()))
+                while (index < json.Length && char.IsWhiteSpace(json[index]))
                     index++;
             }
         }

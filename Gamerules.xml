@@ -9,10 +9,7 @@
             Defines a rule with a boolean value.
             </summary>
         </member>
-        <member name="M:Gamerules.BoolRule.#ctor(System.String,System.String,System.Boolean,System.String)">
-            <inheritdoc/>
-        </member>
-        <member name="M:Gamerules.BoolRule.#ctor(System.String,System.Boolean,System.String)">
+        <member name="M:Gamerules.BoolRule.#ctor(System.Boolean)">
             <inheritdoc/>
         </member>
         <member name="M:Gamerules.BoolRule.Deserialize(System.String)">
@@ -26,18 +23,15 @@
             Defines a rule with an integer value.
             </summary>
         </member>
-        <member name="M:Gamerules.IntRule.#ctor(System.String,System.String,System.Int32,System.Int32,System.Int32,System.String)">
+        <member name="M:Gamerules.IntRule.#ctor(System.Int32,System.Int32,System.Int32)">
             <summary>
             Instantiates a new rule instance with a minimum and maximum value.
             </summary>
         </member>
-        <member name="M:Gamerules.IntRule.#ctor(System.String,System.Int32,System.Int32,System.Int32,System.String)">
+        <member name="M:Gamerules.IntRule.#ctor(System.Int32)">
             <summary>
-            Instantiates a new rule instance with a minimum and maximum value.
+            Instantiates a new rule instance.
             </summary>
-        </member>
-        <member name="M:Gamerules.IntRule.#ctor(System.String,System.String,System.Int32,System.String)">
-            <inheritdoc/>
         </member>
         <member name="P:Gamerules.IntRule.Min">
             <summary>
@@ -60,11 +54,6 @@
             Defines a type of gamerule.
             </summary>
             <typeparam name="T">The type of the gamerule's value.</typeparam>
-        </member>
-        <member name="P:Gamerules.IRule.Name">
-            <summary>
-            The gamerule's internal name. This should be immutable and can only contain a-z, 0-9, forward slash, and underscore.
-            </summary>
         </member>
         <member name="P:Gamerules.IRule.DisplayName">
             <summary>
@@ -117,7 +106,44 @@
             Gets a result that indicates no errors occurred.
             </summary>
         </member>
+        <member name="M:Gamerules.Result.FromOk``1(``0)">
+            <summary>
+            Gets a result that indicates no errors occurred.
+            </summary>
+        </member>
         <member name="M:Gamerules.Result.FromErr(System.String)">
+            <summary>
+            Gets a result that indicates an error occurred.
+            </summary>
+            <param name="err">The error message.</param>
+        </member>
+        <member name="T:Gamerules.Result`1">
+            <summary>
+            Defines a potential error.
+            </summary>
+        </member>
+        <member name="P:Gamerules.Result`1.Err">
+            <summary>
+            The error message, or null if there was no error.
+            </summary>
+        </member>
+        <member name="P:Gamerules.Result`1.Ok">
+            <summary>
+            The ok value.
+            </summary>
+        </member>
+        <member name="P:Gamerules.Result`1.IsOk">
+            <summary>
+            True if there was an error.
+            </summary>
+        </member>
+        <member name="M:Gamerules.Result`1.FromOk(`0)">
+            <summary>
+            Gets a result that indicates no errors occurred.
+            </summary>
+            <param name="ok">The ok value.</param>
+        </member>
+        <member name="M:Gamerules.Result`1.FromErr(System.String)">
             <summary>
             Gets a result that indicates an error occurred.
             </summary>
@@ -129,24 +155,23 @@
             </summary>
             <typeparam name="T">The type parameter for <see cref="T:Gamerules.IRule"/>.</typeparam>
         </member>
-        <member name="M:Gamerules.Rule`1.#ctor(System.String,System.String,`0,System.String)">
+        <member name="M:Gamerules.Rule`1.#ctor(`0)">
             <summary>
             Instantiates a new rule instance.
             </summary>
         </member>
-        <member name="M:Gamerules.Rule`1.#ctor(System.String,`0,System.String)">
+        <member name="P:Gamerules.Rule`1.ID">
             <summary>
-            Instantiates a new rule instance with an inferred display name.
+            The rule's ID. Setting this property to a non-null value registers the rule. Once the rule is registered, it can't be registered again.
             </summary>
-        </member>
-        <member name="P:Gamerules.Rule`1.Name">
-            <inheritdoc/>
         </member>
         <member name="P:Gamerules.Rule`1.Description">
             <inheritdoc/>
         </member>
         <member name="P:Gamerules.Rule`1.DisplayName">
-            <inheritdoc/>
+            <summary>
+            The gamerule's display name. This is automatically determined by <see cref="P:Gamerules.Rule`1.ID"/>, but you can override it by setting this property.
+            </summary>
         </member>
         <member name="P:Gamerules.Rule`1.DefaultValue">
             <inheritdoc/>
@@ -165,11 +190,12 @@
             Start here. Provides methods for registering, enumerating, and getting gamerules.
             </summary>
         </member>
-        <member name="M:Gamerules.RuleAPI.Register(Gamerules.IRule)">
+        <member name="M:Gamerules.RuleAPI.Register(System.String,Gamerules.IRule)">
             <summary>
-            Registers a new gamerule or replaces an existing one with the same name.
+            Registers a gamerule. Once a rule is registered, it can't be registered again.
             </summary>
-            <param name="rule">The gamerule instance.</param>
+            <param name="rule">The gamerule instance, or null to remove the gamerule.</param>
+            <param name="id">Can only contain a-z, 0-9, forward slash, and underscore.</param>
         </member>
         <member name="P:Gamerules.RuleAPI.Rules">
             <summary>
