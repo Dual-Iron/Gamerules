@@ -12,10 +12,57 @@
         <member name="M:Gamerules.BoolRule.#ctor(System.Boolean)">
             <inheritdoc/>
         </member>
-        <member name="M:Gamerules.BoolRule.Deserialize(System.String)">
+        <member name="M:Gamerules.BoolRule.Deserialize(System.Object)">
             <inheritdoc/>
         </member>
         <member name="M:Gamerules.BoolRule.Serialize">
+            <inheritdoc/>
+        </member>
+        <member name="T:Gamerules.EnumRule`1">
+            <summary>
+            Defines a rule with an integer value.
+            </summary>
+        </member>
+        <member name="M:Gamerules.EnumRule`1.#ctor(`0)">
+            <summary>
+            Instantiates a new rule instance.
+            </summary>
+        </member>
+        <member name="M:Gamerules.EnumRule`1.Deserialize(System.Object)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Gamerules.EnumRule`1.Serialize">
+            <inheritdoc/>
+        </member>
+        <member name="T:Gamerules.FloatRule">
+            <summary>
+            Defines a rule with a decimal value.
+            </summary>
+        </member>
+        <member name="M:Gamerules.FloatRule.#ctor(System.Double,System.Double,System.Double)">
+            <summary>
+            Instantiates a new rule instance with a minimum and maximum value.
+            </summary>
+        </member>
+        <member name="M:Gamerules.FloatRule.#ctor(System.Double)">
+            <summary>
+            Instantiates a new rule instance.
+            </summary>
+        </member>
+        <member name="P:Gamerules.FloatRule.Min">
+            <summary>
+            The minimum value.
+            </summary>
+        </member>
+        <member name="P:Gamerules.FloatRule.Max">
+            <summary>
+            The maximum value.
+            </summary>
+        </member>
+        <member name="M:Gamerules.FloatRule.Deserialize(System.Object)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Gamerules.FloatRule.Serialize">
             <inheritdoc/>
         </member>
         <member name="T:Gamerules.IntRule">
@@ -43,7 +90,7 @@
             The maximum value.
             </summary>
         </member>
-        <member name="M:Gamerules.IntRule.Deserialize(System.String)">
+        <member name="M:Gamerules.IntRule.Deserialize(System.Object)">
             <inheritdoc/>
         </member>
         <member name="M:Gamerules.IntRule.Serialize">
@@ -75,9 +122,11 @@
             The gamerule's fallback value.
             </summary>
         </member>
-        <member name="M:Gamerules.IRule.Deserialize(System.String)">
+        <member name="M:Gamerules.IRule.Deserialize(System.Object)">
             <summary>
-            Gets the gamerule's value from a JSON value.
+            Gets the gamerule's value from a JSON value. 
+            <para/>Objects are represented by a <see cref="T:System.Collections.Generic.Dictionary`2"/> with <see cref="T:System.String"/> keys and <see cref="T:System.Object"/> values. 
+            <para/>Arrays are represented by a <see cref="T:System.Collections.Generic.List`1"/> of <see cref="T:System.Object"/> values.
             </summary>
             <param name="jsonValue">The JSON value.</param>
         </member>
@@ -162,7 +211,7 @@
         </member>
         <member name="P:Gamerules.Rule`1.ID">
             <summary>
-            The rule's ID. Setting this property to a non-null value registers the rule. Once the rule is registered, it can't be registered again.
+            The rule's ID. When set, registers the gamerule through <see cref="M:Gamerules.RuleAPI.Register(System.String,Gamerules.IRule)"/>. See the documentation on that method.
             </summary>
         </member>
         <member name="P:Gamerules.Rule`1.Description">
@@ -179,11 +228,16 @@
         <member name="P:Gamerules.Rule`1.Value">
             <inheritdoc/>
         </member>
-        <member name="M:Gamerules.Rule`1.Deserialize(System.String)">
+        <member name="M:Gamerules.Rule`1.Deserialize(System.Object)">
             <inheritdoc/>
         </member>
         <member name="M:Gamerules.Rule`1.Serialize">
             <inheritdoc/>
+        </member>
+        <member name="M:Gamerules.Rule`1.op_Implicit(Gamerules.Rule{`0})~`0">
+            <summary>
+            Implicit cast to <typeparamref name="T"/>.
+            </summary>
         </member>
         <member name="T:Gamerules.RuleAPI">
             <summary>
@@ -192,10 +246,12 @@
         </member>
         <member name="M:Gamerules.RuleAPI.Register(System.String,Gamerules.IRule)">
             <summary>
-            Registers a gamerule. Once a rule is registered, it can't be registered again.
+            Registers a gamerule. Once a rule is registered, it can't be registered again. Make sure to wrap this in a try-catch.
             </summary>
             <param name="rule">The gamerule instance, or null to remove the gamerule.</param>
             <param name="id">Can only contain a-z, 0-9, forward slash, and underscore.</param>
+            <exception cref="T:System.ArgumentNullException"/>
+            <exception cref="T:System.ArgumentException"/>
         </member>
         <member name="P:Gamerules.RuleAPI.Rules">
             <summary>

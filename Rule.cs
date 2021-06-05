@@ -23,7 +23,7 @@ namespace Gamerules
         private string? id;
 
         /// <summary>
-        /// The rule's ID. Setting this property to a non-null value registers the rule. Once the rule is registered, it can't be registered again.
+        /// The rule's ID. When set, registers the gamerule through <see cref="RuleAPI.Register(string, IRule)"/>. See the documentation on that method.
         /// </summary>
         public string? ID
         {
@@ -79,9 +79,14 @@ namespace Gamerules
         object IRule.DefaultValue => DefaultValue;
 
         /// <inheritdoc/>
-        public abstract Result Deserialize(string jsonValue);
+        public abstract Result Deserialize(object jsonValue);
 
         /// <inheritdoc/>
         public abstract string Serialize();
+
+        /// <summary>
+        /// Implicit cast to <typeparamref name="T"/>.
+        /// </summary>
+        public static implicit operator T(Rule<T> t) => t.Value;
     }
 }

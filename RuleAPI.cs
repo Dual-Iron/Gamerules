@@ -11,10 +11,12 @@ namespace Gamerules
         internal static readonly Dictionary<string, IRule> rules = new();
 
         /// <summary>
-        /// Registers a gamerule. Once a rule is registered, it can't be registered again.
+        /// Registers a gamerule. Once a rule is registered, it can't be registered again. Make sure to wrap this in a try-catch.
         /// </summary>
         /// <param name="rule">The gamerule instance, or null to remove the gamerule.</param>
         /// <param name="id">Can only contain a-z, 0-9, forward slash, and underscore.</param>
+        /// <exception cref="ArgumentNullException"/>
+        /// <exception cref="ArgumentException"/>
         public static void Register(string id, IRule rule)
         {
             if (id == null || rule == null)
@@ -28,7 +30,7 @@ namespace Gamerules
                 bool valid = 
                     id[i] >= 'a' && id[i] <= 'z' || 
                     id[i] >= '0' && id[i] <= '9' || 
-                    id[i] == '_';
+                    id[i] == '_' || id[i] == '/';
 
                 if (!valid)
                     throw new ArgumentException($"The name '{id}' is invalid. Rule names can only contain a-z, 0-9, forward slash, and underscore.");

@@ -3,14 +3,14 @@
 namespace Gamerules
 {
     /// <summary>
-    /// Defines a rule with an integer value.
+    /// Defines a rule with a decimal value.
     /// </summary>
-    public class IntRule : Rule<int>
+    public class FloatRule : Rule<double>
     {
         /// <summary>
         /// Instantiates a new rule instance with a minimum and maximum value.
         /// </summary>
-        public IntRule(int defaultValue, int min, int max) : base(defaultValue)
+        public FloatRule(double defaultValue, double min, double max) : base(defaultValue)
         {
             Min = min;
             Max = max;
@@ -19,40 +19,43 @@ namespace Gamerules
         /// <summary>
         /// Instantiates a new rule instance.
         /// </summary>
-        public IntRule(int defaultValue) : this(defaultValue, int.MinValue, int.MaxValue)
+        public FloatRule(double defaultValue) : this(defaultValue, double.MinValue, double.MaxValue)
         {
         }
 
         /// <summary>
         /// The minimum value.
         /// </summary>
-        public int Min { get; }
+        public double Min { get; }
 
         /// <summary>
         /// The maximum value.
         /// </summary>
-        public int Max { get; }
+        public double Max { get; }
 
         /// <inheritdoc/>
         public override Result Deserialize(object jsonValue)
         {
-            if (jsonValue is int i)
+            if (jsonValue is long l)
+                jsonValue = (double)l;
+
+            if (jsonValue is double f)
             {
-                if (i < Min)
+                if (f < Min)
                 {
                     Value = Min;
                     return Result.FromErr($"Value was less than {Min}.");
                 }
-                if (i > Max)
+                if (f > Max)
                 {
                     Value = Max;
                     return Result.FromErr($"Value was greater than {Max}.");
                 }
-                Value = i;
+                Value = f;
                 return Result.FromOk();
             }
             Value = DefaultValue;
-            return Result.FromErr("Value was not a valid integer.");
+            return Result.FromErr("Value was not a valid decimal number.");
         }
 
         /// <inheritdoc/>

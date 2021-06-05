@@ -13,16 +13,11 @@ namespace Gamerules
         }
 
         /// <inheritdoc/>
-        public override Result Deserialize(string fromString)
+        public override Result Deserialize(object jsonValue)
         {
-            if (fromString == "true")
+            if (jsonValue is bool b)
             {
-                Value = true;
-                return Result.FromOk();
-            }
-            if (fromString == "false")
-            {
-                Value = false;
+                Value = b;
                 return Result.FromOk();
             }
             Value = DefaultValue;

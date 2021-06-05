@@ -4,6 +4,7 @@ using RWCustom;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 
 namespace Gamerules
@@ -11,26 +12,33 @@ namespace Gamerules
     [BepInPlugin("com.github.dual.gamerules", "Gamerules", "1.0.0")]
     internal sealed class GamerulesPlugin : BaseUnityPlugin
     {
-        public static event Action? OnUnload;
-
         public void OnEnable()
         {
             On.RainWorldGame.ctor += RainWorldGame_ctor;
+            On.RainWorld.Start += RainWorld_Start;
         }
 
         public void OnDisable()
         {
-            OnUnload?.Invoke();
-            OnUnload = null;
-
             RuleAPI.rules.Clear();
+        }
+
+        private void RainWorld_Start(On.RainWorld.orig_Start orig, RainWorld self)
+        {
+            orig(self);
+            LoadGamerules();
         }
 
         private void RainWorldGame_ctor(On.RainWorldGame.orig_ctor orig, RainWorldGame self, ProcessManager manager)
         {
             orig(self, manager);
+            LoadGamerules();
+        }
+
+        private void LoadGamerules()
+        {
             Logger.LogMessage("Loading gamerules");
-            if (Read(self, self.GetStorySession.saveStateNumber).Err is string s)
+            if (Read().Err is string s)
             {
                 Logger.LogError(s);
             }
@@ -45,9 +53,9 @@ namespace Gamerules
             return first;
         }
 
-        private static Result Read(RainWorldGame game, int saveNum)
+        private static Result Read()
         {
-            string path = Combine(Custom.RootFolderDirectory(), "UserData", $"Gamerules-Save_Slot_{saveNum + 1}-{game.session.characterStats.name}_Slugcat.json");
+            string path = Combine(Custom.RootFolderDirectory(), "UserData", $"Gamerules.json");
 
             try
             {
@@ -57,12 +65,12 @@ namespace Gamerules
                     return Result.FromOk();
                 }
 
-                var jsonResult = ParseJson(File.ReadAllText(path));
-                if (jsonResult.Err is string jsonErr)
-                    return Result.FromErr(jsonErr);
+                var jsonResult = Json.Deserialize(File.ReadAllText(path));
+                if (jsonResult is not Dictionary<string, object> d || d.Values.Any(v => v == null))
+                    return Result.FromErr("Invalid JSON. Use jsonlint.com to validate and format your JSON.");
 
                 var errors = new StringBuilder();
-                foreach (var kvp in jsonResult.Ok!)
+                foreach (var kvp in d)
                 {
                     if (RuleAPI.TryGetRule(kvp.Key, out var rule))
                     {
@@ -87,85 +95,6 @@ namespace Gamerules
             catch (Exception e)
             {
                 return Result.FromErr("There was an error accessing the save file. " + e.Message);
-            }
-        }
-
-        private static Result<Dictionary<string, string>> ParseJson(string json)
-        {
-            var invalid = Result<Dictionary<string, string>>.FromErr("Invalid JSON. Use jsonlint.com to validate your JSON.");
-
-            int index = 0;
-
-            ConsumeWhitespace();
-
-            if (json[index++] != '{')
-                return invalid;
-
-            ConsumeWhitespace();
-
-            var ret = new Dictionary<string, string>();
-
-            while (json[index] == '"')
-            {
-                index++;
-
-                int nameStart = index;
-
-                while (json[index] != '"')
-                    if (index < json.Length)
-                        index++;
-                    else return invalid;
-
-                string name = json.Substring(nameStart, index - nameStart);
-
-                index++;
-
-                ConsumeWhitespace();
-
-                if (json[index++] != ':')
-                    return invalid;
-
-                int valueStart = index;
-                int stack = 0;
-
-                while (true)
-                {
-                    index++;
-
-                    if (index >= json.Length)
-                        return invalid;
-
-                    char cur = json[index];
-
-                    if (cur == ',' && stack != 0 || cur == '}' && stack == 0)
-                        break;
-                    else if (cur == '{')
-                        stack++;
-                    else if (cur == '}')
-                        stack--;
-                }
-
-                string value = json.Substring(valueStart, index - valueStart);
-
-                ret[name] = value.Trim();
-
-                ConsumeWhitespace();
-            }
-
-            if (json[index++] != '}')
-                return invalid;
-
-            ConsumeWhitespace();
-
-            if (index < json.Length)
-                return invalid;
-
-            return Result.FromOk(ret);
-
-            void ConsumeWhitespace()
-            {
-                while (index < json.Length && char.IsWhiteSpace(json[index]))
-                    index++;
             }
         }
 
