@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using UnityEngine;
 
 namespace Gamerules
 {
@@ -16,6 +17,31 @@ namespace Gamerules
         {
             On.RainWorldGame.ctor += RainWorldGame_ctor;
             On.RainWorld.Start += RainWorld_Start;
+            On.RainWorld.Update += RainWorld_Update;
+        }
+
+        private void RainWorld_Update(On.RainWorld.orig_Update orig, RainWorld self)
+        {
+            orig(self);
+            try
+            {
+                if (Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.F1))
+                {
+                    var sb = new StringBuilder("\n");
+                    foreach (var rule in RuleAPI.rules)
+                    {
+                        sb.AppendLine($"\nid............{rule.Key}\n" +
+                            $"default.......{rule.Value.DefaultValue}\n" +
+                            $"current.......{rule.Value.Value}\n" +
+                            $"description...{rule.Value.Description}");
+                    }
+                    Logger.LogMessage(sb);
+                }
+            }
+            catch (Exception e)
+            {
+                Logger.LogError(e);
+            }
         }
 
         public void OnDisable()

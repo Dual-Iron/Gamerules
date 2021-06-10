@@ -53,13 +53,15 @@ namespace Gamerules
 
             StringBuilder sb = new();
 
-            for (int i = 0; i < id.Length - 1; i++)
+            for (int i = 0; i < id.Length; i++)
             {
-                if (id[i] == '/')
+                if (i == 0)
+                    sb.Append(char.ToUpper(id[i]));
+                else if (id[i] == '/')
                     sb.Append(" -> ");
                 else if (id[i] == '_')
                     sb.Append(" ");
-                else if (i == 0 || id[i - 1] == '_' || id[i - 1] == '/')
+                else if (id[i - 1] == '_' || id[i - 1] == '/')
                     sb.Append(" " + char.ToUpper(id[i]));
                 else
                     sb.Append(id[i]);
