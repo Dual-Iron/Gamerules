@@ -5,12 +5,12 @@ namespace Gamerules
     /// <summary>
     /// Defines a rule with a decimal value.
     /// </summary>
-    public class FloatRule : Rule<double>
+    public class FloatRule : Rule<float>
     {
         /// <summary>
         /// Instantiates a new rule instance with a minimum and maximum value.
         /// </summary>
-        public FloatRule(double defaultValue, double min, double max) : base(defaultValue)
+        public FloatRule(float defaultValue, float min, float max) : base(defaultValue)
         {
             Min = min;
             Max = max;
@@ -19,19 +19,19 @@ namespace Gamerules
         /// <summary>
         /// Instantiates a new rule instance.
         /// </summary>
-        public FloatRule(double defaultValue) : this(defaultValue, double.MinValue, double.MaxValue)
+        public FloatRule(float defaultValue) : this(defaultValue, float.NegativeInfinity, float.PositiveInfinity)
         {
         }
 
         /// <summary>
         /// The minimum value.
         /// </summary>
-        public double Min { get; }
+        public float Min { get; }
 
         /// <summary>
         /// The maximum value.
         /// </summary>
-        public double Max { get; }
+        public float Max { get; }
 
         /// <inheritdoc/>
         public override Result Deserialize(object jsonValue)
@@ -39,19 +39,19 @@ namespace Gamerules
             if (jsonValue is long l)
                 jsonValue = (double)l;
 
-            if (jsonValue is double f)
+            if (jsonValue is double d)
             {
-                if (f < Min)
+                if (d < Min)
                 {
                     Value = Min;
                     return Result.FromErr($"Value was less than {Min}.");
                 }
-                if (f > Max)
+                if (d > Max)
                 {
                     Value = Max;
                     return Result.FromErr($"Value was greater than {Max}.");
                 }
-                Value = f;
+                Value = (float)d;
                 return Result.FromOk();
             }
             Value = DefaultValue;

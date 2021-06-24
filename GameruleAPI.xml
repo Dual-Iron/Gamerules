@@ -39,12 +39,12 @@
             Defines a rule with a decimal value.
             </summary>
         </member>
-        <member name="M:Gamerules.FloatRule.#ctor(System.Double,System.Double,System.Double)">
+        <member name="M:Gamerules.FloatRule.#ctor(System.Single,System.Single,System.Single)">
             <summary>
             Instantiates a new rule instance with a minimum and maximum value.
             </summary>
         </member>
-        <member name="M:Gamerules.FloatRule.#ctor(System.Double)">
+        <member name="M:Gamerules.FloatRule.#ctor(System.Single)">
             <summary>
             Instantiates a new rule instance.
             </summary>
