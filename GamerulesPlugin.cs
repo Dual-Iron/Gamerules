@@ -20,20 +20,30 @@ namespace Gamerules
             On.RainWorld.Update += RainWorld_Update;
         }
 
+        public void OnDisable()
+        {
+            RuleAPI.rules.Clear();
+        }
+
         private void RainWorld_Update(On.RainWorld.orig_Update orig, RainWorld self)
         {
             orig(self);
             try
             {
+                if (Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.F2))
+                {
+                    LoadGamerules();
+                }
                 if (Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.F1))
                 {
                     var sb = new StringBuilder("\n");
                     foreach (var rule in RuleAPI.rules)
                     {
-                        sb.AppendLine($"\nid............{rule.Key}\n" +
-                            $"default.......{rule.Value.DefaultValue}\n" +
-                            $"current.......{rule.Value.Value}\n" +
-                            $"description...{rule.Value.Description}");
+                        sb.AppendLine(
+                            $"\nname......{rule.Key}\n" +
+                            $"default...{rule.Value.DefaultValue}\n" +
+                            $"current...{rule.Value.Value}\n" +
+                            $"desc......{rule.Value.Description}");
                     }
                     Logger.LogMessage(sb);
                 }
@@ -42,11 +52,6 @@ namespace Gamerules
             {
                 Logger.LogError(e);
             }
-        }
-
-        public void OnDisable()
-        {
-            RuleAPI.rules.Clear();
         }
 
         private void RainWorld_Start(On.RainWorld.orig_Start orig, RainWorld self)
