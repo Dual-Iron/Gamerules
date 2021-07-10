@@ -6,8 +6,9 @@ namespace Gamerules.Rules.Builders
     /// Base class for rule builders.
     /// </summary>
     /// <typeparam name="T">Value type of the rule.</typeparam>
+    /// <typeparam name="TRule">The type of rule this builder constructs.</typeparam>
     /// <typeparam name="TBuilder">The implementing class's type.</typeparam>
-    public abstract class RuleBuilder<TBuilder, T> where T : notnull where TBuilder : RuleBuilder<TBuilder, T>
+    public abstract class RuleBuilder<TBuilder, TRule, T> where TRule : notnull, IRule where T : notnull where TBuilder : RuleBuilder<TBuilder, TRule, T>
     {
         private bool registered;
 
@@ -63,16 +64,18 @@ namespace Gamerules.Rules.Builders
         /// Registers the rule and disposes of this builder instance.
         /// </summary>
         /// <param name="id">The ID to register this rule under. Can only contain a-z, 0-9, forward slash, and underscore.</param>
-        public void Register(string id)
+        public TRule Register(string id)
         {
             if (registered) throw new InvalidOperationException("Builder instance already registered a rule.");
             registered = true;
-            RuleAPI.Register(id, GetRule(id));
+            var rule = GetRule(id);
+            RuleAPI.Register(id, rule);
+            return rule;
         }
 
         /// <summary>
         /// Should construct and return a gamerule instance.
         /// </summary>
-        protected abstract IRule GetRule(string id);
+        protected abstract TRule GetRule(string id);
     }
 }
