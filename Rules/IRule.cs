@@ -1,16 +1,12 @@
-﻿namespace Gamerules
+﻿using Gamerules;
+
+namespace GameruleAPI.Rules
 {
     /// <summary>
     /// Defines a type of gamerule.
     /// </summary>
-    /// <typeparam name="T">The type of the gamerule's value.</typeparam>
     public interface IRule
     {
-        /// <summary>
-        /// The gamerule's display name.
-        /// </summary>
-        string DisplayName { get; }
-
         /// <summary>
         /// The gamerule's description.
         /// </summary>

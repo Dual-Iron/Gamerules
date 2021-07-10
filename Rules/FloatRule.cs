@@ -1,16 +1,17 @@
-﻿using System;
+﻿using Gamerules;
+using System;
 
-namespace Gamerules
+namespace GameruleAPI.Rules
 {
     /// <summary>
-    /// Defines a rule with an integer value.
+    /// Defines a rule with a decimal value.
     /// </summary>
-    public class IntRule : Rule<int>
+    public class FloatRule : Rule<float>
     {
         /// <summary>
         /// Instantiates a new rule instance with a minimum and maximum value.
         /// </summary>
-        public IntRule(int defaultValue, int min, int max) : base(defaultValue)
+        public FloatRule(float defaultValue, float min, float max) : base(defaultValue)
         {
             Min = min;
             Max = max;
@@ -19,44 +20,47 @@ namespace Gamerules
         /// <summary>
         /// Instantiates a new rule instance.
         /// </summary>
-        public IntRule(int defaultValue) : this(defaultValue, int.MinValue, int.MaxValue)
+        public FloatRule(float defaultValue) : this(defaultValue, float.NegativeInfinity, float.PositiveInfinity)
         {
         }
 
         /// <summary>
         /// The minimum value.
         /// </summary>
-        public int Min { get; }
+        public float Min { get; }
 
         /// <summary>
         /// The maximum value.
         /// </summary>
-        public int Max { get; }
+        public float Max { get; }
 
         /// <inheritdoc/>
-        public override Result Deserialize(object jsonValue)
+        protected override Result Deserialize(object jsonValue)
         {
-            if (jsonValue is int i)
+            if (jsonValue is long l)
+                jsonValue = (double)l;
+
+            if (jsonValue is double d)
             {
-                if (i < Min)
+                if (d < Min)
                 {
                     Value = Min;
                     return Result.FromErr($"Value was less than {Min}.");
                 }
-                if (i > Max)
+                if (d > Max)
                 {
                     Value = Max;
                     return Result.FromErr($"Value was greater than {Max}.");
                 }
-                Value = i;
+                Value = (float)d;
                 return Result.FromOk();
             }
             Value = DefaultValue;
-            return Result.FromErr("Value was not a valid integer.");
+            return Result.FromErr("Value was not a valid decimal number.");
         }
 
         /// <inheritdoc/>
-        public override string Serialize()
+        protected override string Serialize()
         {
             return Value.ToString();
         }

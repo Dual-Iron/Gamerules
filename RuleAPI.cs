@@ -1,10 +1,11 @@
-﻿using System;
+﻿using GameruleAPI.Rules;
+using System;
 using System.Collections.Generic;
 
 namespace Gamerules
 {
     /// <summary>
-    /// Start here. Provides methods for registering, enumerating, and getting gamerules.
+    /// Provides methods for registering, enumerating, and fetching gamerules.
     /// </summary>
     public static class RuleAPI
     {
@@ -19,11 +20,9 @@ namespace Gamerules
         /// <exception cref="ArgumentException"/>
         public static void Register(string id, IRule rule)
         {
-            if (id == null || rule == null)
-                throw new ArgumentNullException();
-
-            if (rules.ContainsKey(id))
-                throw new ArgumentException($"The ID '{id}' is already taken.");
+            if (string.IsNullOrEmpty(id)) throw new ArgumentException($"'{nameof(id)}' cannot be null or empty.", nameof(id));
+            if (rule is null) throw new ArgumentNullException(nameof(rule));
+            if (rules.ContainsKey(id)) throw new ArgumentException($"The ID '{id}' is already taken.");
 
             for (int i = 0; i < id.Length; i++)
             {
@@ -40,16 +39,18 @@ namespace Gamerules
         }
 
         /// <summary>
-        /// An enumerable of every registered gamerule.
+        /// An enumerable of every registered ID.
         /// </summary>
-        public static IEnumerable<IRule> Rules => rules.Values;
+        public static IEnumerable<string> Rules => rules.Keys;
 
         /// <summary>
         /// Tries to get a rule with the given name.
         /// </summary>
         /// <returns>True if a matching rule exists; false otherwise.</returns>
+        /// <exception cref="ArgumentException">Throws when <paramref name="id"/> is null or empty.</exception>
         public static bool TryGetRule(string id, [System.Diagnostics.CodeAnalysis.MaybeNullWhen(false)] out IRule rule)
         {
+            if (string.IsNullOrEmpty(id)) throw new ArgumentException($"'{nameof(id)}' cannot be null or empty.", nameof(id));
             return rules.TryGetValue(id, out rule);
         }
     }

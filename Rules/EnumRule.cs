@@ -1,6 +1,7 @@
-﻿using System;
+﻿using Gamerules;
+using System;
 
-namespace Gamerules
+namespace GameruleAPI.Rules
 {
     /// <summary>
     /// Defines a rule with an integer value.
@@ -15,11 +16,10 @@ namespace Gamerules
         }
 
         /// <inheritdoc/>
-        public override Result Deserialize(object jsonValue)
+        protected override Result Deserialize(object jsonValue)
         {
             var type = typeof(T);
             if (jsonValue is string s)
-            {
                 try
                 {
                     Value = (T)Enum.Parse(type, s.Trim(), true);
@@ -30,14 +30,12 @@ namespace Gamerules
                     bool flags = type.GetCustomAttributes(typeof(FlagsAttribute), false).Length > 0;
                     return Result.FromErr($"Value is not accepted. Acceptable values can be {(flags ? "one or more" : "one")} of: [{string.Join(",", Enum.GetNames(type))}].{(flags ? " Separate multiple values with commas." : "")}");
                 }
-                
-            }
             Value = DefaultValue;
             return Result.FromErr("Value was not a valid string.");
         }
 
         /// <inheritdoc/>
-        public override string Serialize()
+        protected override string Serialize()
         {
             return Value.ToString();
         }

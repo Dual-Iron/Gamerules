@@ -1,6 +1,7 @@
-﻿using System;
+﻿using Gamerules;
+using System;
 
-namespace Gamerules
+namespace GameruleAPI.Rules
 {
     /// <summary>
     /// Defines a rule with a boolean value.
@@ -13,7 +14,7 @@ namespace Gamerules
         }
 
         /// <inheritdoc/>
-        public override Result Deserialize(object jsonValue)
+        protected override Result Deserialize(object jsonValue)
         {
             if (jsonValue is bool b)
             {
@@ -25,7 +26,7 @@ namespace Gamerules
         }
 
         /// <inheritdoc/>
-        public override string Serialize()
+        protected override string Serialize()
         {
             return Value ? "true" : "false";
         }
