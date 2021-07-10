@@ -36,6 +36,8 @@ namespace Gamerules
             }
 
             rules[id] = rule;
+
+            rule.OnRegister(id);
         }
 
         /// <summary>

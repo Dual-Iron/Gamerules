@@ -22,20 +22,6 @@ namespace Gamerules.Rules
         }
 
         /// <summary>
-        /// Registers this gamerule.
-        /// </summary>
-        /// <param name="id">The ID to register this rule under. Can only contain a-z, 0-9, forward slash, and underscore.</param>
-        /// <exception cref="ArgumentNullException"/>
-        /// <exception cref="ArgumentException"/>
-        public void Register(string id)
-        {
-            RuleAPI.Register(id, this);
-            // Have to explicitly set ID after calling Register to prevent setting ID if an exception is thrown.
-            ID = id;
-            OnUpdateValue?.Invoke(Value);
-        }
-
-        /// <summary>
         /// The rule's ID. Set to a non-null value after calling <see cref="Register(string)"/>.
         /// </summary>
         public string? ID { get; private set; }
@@ -76,6 +62,12 @@ namespace Gamerules.Rules
         string IRule.Serialize()
         {
             return Serialize();
+        }
+
+        void IRule.OnRegister(string id)
+        {
+            ID = id;
+            OnUpdateValue?.Invoke(Value);
         }
 
         /// <summary>

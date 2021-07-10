@@ -8,11 +8,11 @@ namespace Gamerules.Rules.Builders
     public class BoolRuleBuilder : RuleBuilder<BoolRuleBuilder, bool>
     {
         /// <inheritdoc/>
-        protected override void DoRegister(string id, bool defaultValue)
+        protected override IRule GetRule(string id)
         {
             var ret = new BoolRule(defaultValue) { Description = description };
             ret.OnUpdateValue += onUpdate;
-            ret.Register(id);
+            return ret;
         }
     }
 
@@ -22,11 +22,12 @@ namespace Gamerules.Rules.Builders
     public class EnumRuleBuilder<T> : RuleBuilder<EnumRuleBuilder<T>, T> where T : Enum
     {
         /// <inheritdoc/>
-        protected override void DoRegister(string id, T defaultValue)
+        protected override IRule GetRule(string id)
         {
+            if (defaultValue == null) throw new InvalidOperationException("Default value is null.");
             var ret = new EnumRule<T>(defaultValue) { Description = description };
             ret.OnUpdateValue += onUpdate;
-            ret.Register(id);
+            return ret;
         }
     }
 
@@ -59,11 +60,11 @@ namespace Gamerules.Rules.Builders
         }
 
         /// <inheritdoc/>
-        protected override void DoRegister(string id, int defaultValue)
+        protected override IRule GetRule(string id)
         {
             var ret = new IntRule(defaultValue, min, max) { Description = description };
             ret.OnUpdateValue += onUpdate;
-            ret.Register(id);
+            return ret;
         }
     }
 
@@ -96,11 +97,11 @@ namespace Gamerules.Rules.Builders
         }
 
         /// <inheritdoc/>
-        protected override void DoRegister(string id, float defaultValue)
+        protected override IRule GetRule(string id)
         {
             var ret = new FloatRule(defaultValue, min, max) { Description = description };
             ret.OnUpdateValue += onUpdate;
-            ret.Register(id);
+            return ret;
         }
     }
 }

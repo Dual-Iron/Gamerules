@@ -10,7 +10,11 @@ namespace Gamerules.Rules.Builders
     public abstract class RuleBuilder<TBuilder, T> where T : notnull where TBuilder : RuleBuilder<TBuilder, T>
     {
         private bool registered;
-        private T defaultValue;
+
+        /// <summary>
+        /// Rule's default value.
+        /// </summary>
+        protected T? defaultValue;
 
         /// <summary>
         /// Rule's description.
@@ -23,7 +27,7 @@ namespace Gamerules.Rules.Builders
         protected UpdateValueDelegate<T>? onUpdate;
 
         /// <inheritdoc/>
-        protected RuleBuilder() { defaultValue = default!; }
+        protected RuleBuilder() { }
 
         /// <summary>
         /// Sets the rule's description.
@@ -62,14 +66,13 @@ namespace Gamerules.Rules.Builders
         public void Register(string id)
         {
             if (registered) throw new InvalidOperationException("Builder instance already registered a rule.");
-            if (defaultValue == null) throw new InvalidOperationException("Default value is null.");
             registered = true;
-            DoRegister(id, defaultValue);
+            RuleAPI.Register(id, GetRule(id));
         }
 
         /// <summary>
-        /// Should actually register the rule using <see cref="Rule{T}.Register(string)"/> or <see cref="RuleAPI.Register(string, IRule)"/>.
+        /// Should construct and return a gamerule instance.
         /// </summary>
-        protected abstract void DoRegister(string id, T defaultValue);
+        protected abstract IRule GetRule(string id);
     }
 }

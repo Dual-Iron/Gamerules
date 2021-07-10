@@ -32,5 +32,11 @@
         /// Gets a JSON value from the gamerule's value.
         /// </summary>
         string Serialize();
+
+        /// <summary>
+        /// Called after the gamerule is registered.
+        /// </summary>
+        /// <param name="id">The ID of the registered gamerule.</param>
+        void OnRegister(string id);
     }
 }
