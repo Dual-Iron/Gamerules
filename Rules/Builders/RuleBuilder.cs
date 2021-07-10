@@ -10,7 +10,7 @@ namespace Gamerules.Rules.Builders
     public abstract class RuleBuilder<TBuilder, T> where T : notnull where TBuilder : RuleBuilder<TBuilder, T>
     {
         private bool registered;
-        private T? defaultValue;
+        private T defaultValue;
 
         /// <summary>
         /// Rule's description.
@@ -23,7 +23,7 @@ namespace Gamerules.Rules.Builders
         protected UpdateValueDelegate<T>? onUpdate;
 
         /// <inheritdoc/>
-        protected RuleBuilder() { }
+        protected RuleBuilder() { defaultValue = default!; }
 
         /// <summary>
         /// Sets the rule's description.
@@ -62,7 +62,7 @@ namespace Gamerules.Rules.Builders
         public void Register(string id)
         {
             if (registered) throw new InvalidOperationException("Builder instance already registered a rule.");
-            if (defaultValue == null) throw new InvalidOperationException("Default value is not set.");
+            if (defaultValue == null) throw new InvalidOperationException("Default value is null.");
             registered = true;
             DoRegister(id, defaultValue);
         }
