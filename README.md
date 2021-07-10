@@ -1,17 +1,19 @@
 Example optional dependency.
 
 ```cs
+// This is in a class deriving from BaseUnityPlugin.
+
 private int myValue;
 
 public void OnEnable() {
-	try {
-		LoadGamerules();
-	}
-	catch { }
+    try {
+        LoadGamerules();
+    }
+    catch { }
 }
 
 private void LoadGamerules() {
-	new IntRuleBuilder()
+    new IntRuleBuilder()
         .Default(0)
         .Min(0)
         .Max(10)
