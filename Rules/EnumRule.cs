@@ -1,7 +1,6 @@
-﻿using Gamerules;
-using System;
+﻿using System;
 
-namespace GameruleAPI.Rules
+namespace Gamerules.Rules
 {
     /// <summary>
     /// Defines a rule with an integer value.

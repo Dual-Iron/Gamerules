@@ -1,4 +1,4 @@
-﻿using GameruleAPI.Rules;
+﻿using Gamerules.Rules;
 using System;
 using System.Collections.Generic;
 

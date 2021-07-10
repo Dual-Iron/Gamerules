@@ -1,6 +1,4 @@
-﻿using Gamerules;
-
-namespace GameruleAPI.Rules
+﻿namespace Gamerules.Rules
 {
     /// <summary>
     /// Defines a type of gamerule.
@@ -15,7 +13,7 @@ namespace GameruleAPI.Rules
         /// <summary>
         /// The gamerule's current value.
         /// </summary>
-        object Value { get; set; }
+        object Value { get; }
 
         /// <summary>
         /// The gamerule's fallback value.

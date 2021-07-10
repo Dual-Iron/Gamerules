@@ -1,21 +1,18 @@
-﻿using Gamerules;
-using System;
-using System.Text;
-using System.Text.RegularExpressions;
+﻿using System;
 
-namespace GameruleAPI.Rules
+namespace Gamerules.Rules
 {
+    /// <summary>
+    /// Used for <see cref="Rule{T}.OnUpdateValue"/>.
+    /// </summary>
+    public delegate void UpdateValueDelegate<T>(T value) where T : notnull;
+
     /// <summary>
     /// An abstract, generic implementation of <see cref="IRule"/>.
     /// </summary>
     /// <typeparam name="T">The type parameter for <see cref="IRule"/>.</typeparam>
     public abstract class Rule<T> : IRule where T : notnull
     {
-        /// <summary>
-        /// Used for <see cref="Rule{T}.OnDeserialize"/>.
-        /// </summary>
-        public delegate void DeserializeDelegate(T value);
-
         /// <summary>
         /// Instantiates a new rule instance.
         /// </summary>
@@ -33,13 +30,13 @@ namespace GameruleAPI.Rules
         public void Register(string id)
         {
             RuleAPI.Register(id, this);
-            // Have to explicitly set ID after calling Register
-            // to prevent setting ID if an exception is thrown.
+            // Have to explicitly set ID after calling Register to prevent setting ID if an exception is thrown.
             ID = id;
+            OnUpdateValue?.Invoke(Value);
         }
 
         /// <summary>
-        /// The rule's ID. When set, registers the gamerule through <see cref="RuleAPI.Register(string, IRule)"/>. See the documentation on that method.
+        /// The rule's ID. Set to a non-null value after calling <see cref="Register(string)"/>.
         /// </summary>
         public string? ID { get; private set; }
 
@@ -50,9 +47,9 @@ namespace GameruleAPI.Rules
         public T DefaultValue { get; }
 
         /// <inheritdoc/>
-        public T Value { get; set; }
+        public T Value { get; protected set; }
 
-        object IRule.Value { get => Value; set => Value = (T)value; }
+        object IRule.Value => Value;
 
         object IRule.DefaultValue => DefaultValue;
 
@@ -63,14 +60,16 @@ namespace GameruleAPI.Rules
         protected abstract string Serialize();
 
         /// <summary>
-        /// Fired after the rule is deserialized.
+        /// Fired after the rule is registered and after it deserializes.
         /// </summary>
-        public event DeserializeDelegate? OnDeserialize;
+        public event UpdateValueDelegate<T>? OnUpdateValue;
 
         Result IRule.Deserialize(object jsonValue)
         {
+            var value = Value;
             var result = Deserialize(jsonValue);
-            OnDeserialize?.Invoke(Value);
+            if (!value.Equals(Value))
+                OnUpdateValue?.Invoke(Value);
             return result;
         }
 

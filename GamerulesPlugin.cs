@@ -1,5 +1,4 @@
 ﻿using BepInEx;
-using BepInEx.Logging;
 using RWCustom;
 using System;
 using System.Collections.Generic;
@@ -98,7 +97,7 @@ namespace Gamerules
 
                 var jsonResult = Json.Deserialize(File.ReadAllText(path));
                 if (jsonResult is not Dictionary<string, object> d || d.Values.Any(v => v == null))
-                    return Result.FromErr("Invalid JSON. Use jsonlint.com to validate and format your JSON.");
+                    return Result.FromErr("Invalid JSON. Use jsonlint.com to validate and format your JSON. Ensure no values are null.");
 
                 var errors = new StringBuilder();
                 foreach (var kvp in d)
@@ -129,7 +128,7 @@ namespace Gamerules
             }
         }
 
-        private static Tuple<string, Result> GenerateJson()
+        private static Result<string> GenerateJson()
         {
             // TODO Formatting
             StringBuilder err = new();
@@ -141,6 +140,10 @@ namespace Gamerules
                 try
                 {
                     string val = item.Value.Serialize();
+
+                    if (err.Length > 0)
+                        continue;
+
                     string comma = count < RuleAPI.rules.Count - 1 ? "," : "";
                     ret.Append($"\"{item.Key}\":{val}{comma}");
                 }
@@ -150,9 +153,18 @@ namespace Gamerules
                 }
             }
 
+            if (err.Length > 0)
+                return Result<string>.FromErr(err.ToString());
+
             ret.Append('}');
 
-            return new(ret.ToString(), err.Length > 0 ? Result.FromErr(err.ToString()) : Result.FromOk());
+            var retString = ret.ToString();
+
+            var jsonResult = Json.Deserialize(retString);
+            if (jsonResult is not Dictionary<string, object> d || d.Values.Any(v => v == null))
+                return Result<string>.FromErr("Invalid JSON. Use jsonlint.com to validate and format your JSON. Ensure no values are null.\n" + retString);
+
+            return Result.FromOk(retString);
         }
 
         private struct Tuple<T1, T2>
