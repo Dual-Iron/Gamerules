@@ -36,7 +36,7 @@ namespace Gamerules.Rules
         /// <inheritdoc/>
         protected override string Serialize()
         {
-            return Value.ToString();
+            return $"\"{Value}\"";
         }
     }
 }

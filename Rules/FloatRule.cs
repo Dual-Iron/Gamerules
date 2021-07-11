@@ -1,4 +1,6 @@
-﻿namespace Gamerules.Rules
+﻿using System;
+
+namespace Gamerules.Rules
 {
     /// <summary>
     /// Defines a rule with a decimal value.
@@ -59,7 +61,7 @@
         /// <inheritdoc/>
         protected override string Serialize()
         {
-            return Value.ToString();
+            return Value == Math.Floor(Value) ? Value.ToString() + ".0" : Value.ToString();
         }
     }
 }

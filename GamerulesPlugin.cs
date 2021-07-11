@@ -29,7 +29,11 @@ namespace Gamerules
             orig(self);
             try
             {
-                if (Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.F2))
+                if (Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.F3))
+                {
+                    CreateJsonFile();
+                }
+                else if (Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.F2))
                 {
                     LoadGamerules();
                 }
@@ -53,6 +57,27 @@ namespace Gamerules
             }
         }
 
+        private void CreateJsonFile()
+        {
+            var result = GenerateJson();
+            if (result.IsOk)
+            {
+                try
+                {
+                    File.WriteAllText(GameruleFile, result.Ok);
+                }
+                catch (Exception e)
+                {
+                    Logger.LogError("Failed to write the JSON file: " + e.Message);
+                }
+                Logger.LogMessage("Successfully generated JSON.");
+            }
+            else
+            {
+                Logger.LogError("Failed to generate JSON: " + result.Err);
+            }
+        }
+
         private void RainWorld_Start(On.RainWorld.orig_Start orig, RainWorld self)
         {
             orig(self);
@@ -67,12 +92,17 @@ namespace Gamerules
 
         private void LoadGamerules()
         {
-            Logger.LogMessage("Loading gamerules");
-            if (Read().Err is string s)
+            if (Read().Err is not string s)
             {
-                Logger.LogError(s);
+                Logger.LogMessage("Successfully loaded gamerules.");
+            }
+            else
+            {
+                Logger.LogError("Failed to load gamerules: " + s);
             }
         }
+
+        private static string GameruleFile => Combine(Custom.RootFolderDirectory(), "UserData", $"Gamerules.json");
 
         private static string Combine(string first, params string[] other)
         {
@@ -85,7 +115,7 @@ namespace Gamerules
 
         private static Result Read()
         {
-            string path = Combine(Custom.RootFolderDirectory(), "UserData", $"Gamerules.json");
+            string path = GameruleFile;
 
             try
             {
@@ -144,7 +174,7 @@ namespace Gamerules
                     if (err.Length > 0)
                         continue;
 
-                    string comma = count < RuleAPI.rules.Count - 1 ? "," : "";
+                    string comma = count++ < RuleAPI.rules.Count - 1 ? "," : "";
                     ret.Append($"\"{item.Key}\":{val}{comma}");
                 }
                 catch (Exception e)
