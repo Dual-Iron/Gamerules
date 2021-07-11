@@ -4,8 +4,8 @@ Add and use gamerules that can be modified in real-time through a configuration 
 
 You can use a few hotkeys while Rain World is in focus to control your gamerules.
 - Ctrl F1: Prints all gamerules in the console. You can find your console in `Rain World/BepInEx/LogOutput.log` .
-- Ctrl F2: Reads all gamerules from the file `Rain World/UserData/Gamerules.json`.
-- Ctrl F3: Writes all gamerules into the file `Rain World/UserData/Gamerules.json`.
+- Ctrl F2: Reads all gamerules from the file `Rain World/UserData/Gamerules.json`. The input can be formatted or not.
+- Ctrl F3: Writes all gamerules into the file `Rain World/UserData/Gamerules.json`. The output is unformatted.
 
 Your Rain World folder will be with the rest of your Steam apps (e.g. `C:/Program Files (x86)/Steam/steamapps/common/Rain World`).
 
